@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game 01</title>
+    <style>
+        canvas{
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        var canvas, ctx, altura, largura, frames = 0;
+        function main() {
+            altura = window.innerHeight;
+            largura = window.innerWidth;
+
+            if(largura >= 500) {
+                largura = 600
+                altura = 600
+            }
+            canvas = document.createElement("canvas");
+            canvas.width = largura;
+            canvas.height = altura;
+            canvas.style.border = "1px solid #000";
+            
+            ctx = canvas.getContext("2d");
+            document.body.appendChild(canvas);
+            document.addEventListener("mousedown", clique);
+
+            roda();
+
+        }
+        function clique(event) {
+            alert("clicou")
+        }
+        function roda() {
+            atualiza();
+            desenha();
+            window.requestAnimationFrame(roda);
+
+        }
+        function atualiza() {
+            frames++;
+        }
+        function desenha() {
+            ctx.fillStyle = "#333";
+            ctx.fillRect(0, 0, largura, altura);
+        }
+
+        main();
+
+    </script>
+    
+</body>
+</html>
