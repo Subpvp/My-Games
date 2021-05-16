@@ -18,7 +18,7 @@
 </head>
 <body>
     <script>
-        var canvas, ctx, altura, largura, frames = 0, maxjump = 3;
+        var canvas, ctx, altura, largura, frames = 0, maxjump = 3, velocidade = 6,
 
         chao = {
             y: 525,
@@ -63,6 +63,56 @@
                 ctx.fillRect(this.x, this.y, this.largura, this.altura)
             }
         }
+        
+        obstaculos = {
+            _obs: [],
+
+            cores: ["#444", "#093", "#060", "#999", "#8888"],
+            tempoinsere: 0,
+
+            insere: function() {
+                this._obs.push({
+                    x: 600,
+                    largura: 30 + Math.floor(30 * Math.random()),
+                    altura: 30 + Math.floor(120 * Math.random()),
+                    cor: this.cores[Math.floor(5 * Math.random())]
+                });
+
+                this.tempoinsere = 30 +  Math.floor(20 * Math.random());
+            },
+
+            atualiza: function() {   
+                if(this.tempoinsere == 0)
+                   this.insere();
+              else {
+                   this.tempoinsere--}
+              
+
+            for (var i = 0, tam = this._obs.length; i < tam; i++) {
+                    var obs = this._obs[i];
+                    obs.x -= velocidade;
+
+                    if(obs.x <= -obs.largura) {
+                        this._obs.splice(i, 1);
+                        tam--;
+                         i--;
+
+                        
+                    } 
+                }
+            },
+
+            desenha: function() {
+                for (var i = 0, tam = this._obs.length; i < tam; i++) {
+                    var obs = this._obs[i];
+                    ctx.fillStyle = obs.cor;
+                    ctx.fillRect(obs.x, chao.y - obs.altura, obs.largura, obs.altura);
+                }
+
+            }
+
+        }
+
         function main() {
             altura = window.innerHeight;
             largura = window.innerWidth;
@@ -95,16 +145,19 @@
         }
         function atualiza() {
             frames++;
-
+            
             bloco.atualiza();
+            obstaculos.atualiza();
         }
         function desenha() {
             ctx.fillStyle = "#333";
             ctx.fillRect(0, 0, largura, altura);
 
             chao.desenha();
-            
+            obstaculos.desenha();
             bloco.desenha();
+
+            
         }
 
         main();
