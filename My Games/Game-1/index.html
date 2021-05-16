@@ -18,7 +18,51 @@
 </head>
 <body>
     <script>
-        var canvas, ctx, altura, largura, frames = 0;
+        var canvas, ctx, altura, largura, frames = 0, maxjump = 3;
+
+        chao = {
+            y: 525,
+            altura: 75,
+            cor:"#777",
+
+            desenha: function() {
+                ctx.fillStyle = this.cor;
+                ctx.fillRect(0, this.y, largura, this.altura)
+            }
+        }
+
+        bloco = {
+            x:50,
+            y:0,
+            altura:50,
+            largura:50,
+            cor:"#784021",
+            gravidade: 1,
+            velocidade: 0,
+            powerjump: 18.5,
+            quantjump: 0,
+            
+            atualiza: function() {
+                this.velocidade += this.gravidade;
+                this.y += this.velocidade;
+                
+                if (this.y > chao.y - this.altura) {
+                    this.y = chao.y - this.altura
+                    this.quantjump = 0
+                }
+            },
+
+            pula: function() {
+                if (this.quantjump < maxjump)
+                this.velocidade = -this.powerjump;
+                this.quantjump++;
+            },
+
+            desenha: function() {
+                ctx.fillStyle = this.cor;
+                ctx.fillRect(this.x, this.y, this.largura, this.altura)
+            }
+        }
         function main() {
             altura = window.innerHeight;
             largura = window.innerWidth;
@@ -26,7 +70,7 @@
             if(largura >= 500) {
                 largura = 600
                 altura = 600
-            }
+            };
             canvas = document.createElement("canvas");
             canvas.width = largura;
             canvas.height = altura;
@@ -40,20 +84,27 @@
 
         }
         function clique(event) {
-            alert("clicou")
+          bloco.pula();
         }
         function roda() {
             atualiza();
-            desenha();
-            window.requestAnimationFrame(roda);
 
+            desenha();
+
+            window.requestAnimationFrame(roda);
         }
         function atualiza() {
             frames++;
+
+            bloco.atualiza();
         }
         function desenha() {
             ctx.fillStyle = "#333";
             ctx.fillRect(0, 0, largura, altura);
+
+            chao.desenha();
+            
+            bloco.desenha();
         }
 
         main();
