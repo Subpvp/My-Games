@@ -48,6 +48,7 @@
             velocidade: 0,
             powerjump: 30,
             quantjump: 0,
+            score: 0,
             
             atualiza: function() {
                 this.velocidade += this.gravidade;
@@ -65,6 +66,17 @@
                 this.velocidade = -this.powerjump;
                 this.quantjump++;
             },
+            reset: function(){
+                this.velocidade = 0;
+                   this.y = 0;
+
+                   if (this.score > record){
+                      localStorage.setItem("record", this.score)
+                      record = this.score;
+                   }
+                      this.score = 0;
+                   
+            },
 
             desenha: function() {
                 ctx.fillStyle = this.cor;
@@ -80,9 +92,10 @@
 
             insere: function() {
                 this._obs.push({
-                    x: 1200,
-                    largura: 50 + Math.floor(30 * Math.random()),
-                    altura: 50 + Math.floor(120 * Math.random()),
+                    x: largura,
+                   // largura: 50 + Math.floor(30 * Math.random()),
+                   largura: 50,
+                   altura: 50 + Math.floor(120 * Math.random()),
                     cor: this.cores[Math.floor(5 * Math.random())]
                 });
 
@@ -105,8 +118,12 @@
                            estadoAtual = estado.perdeu;
                     
                     }
+                    else if(obs.x == 0)
+                           bloco.score++;
 
-                    if(obs.x <= -obs.largura) {
+
+
+                    else if(obs.x <= -obs.largura) {
                         this._obs.splice(i, 1);
                         tam--;
                          i--;
@@ -149,6 +166,10 @@
             document.addEventListener("mousedown", clique);
 
             estadoAtual = estado.jogar;
+            record = localStorage.getItem("record");
+            
+            if (record == null)
+                record = 0;
 
             roda();
             
@@ -162,8 +183,7 @@
           }
           else if (estadoAtual == estado.perdeu && bloco.y >= 2 * altura) {
                    estadoAtual = estado.jogar;
-                   bloco.velocidade = 0;
-                   bloco.y = 0;
+                   bloco.reset();               
           }
         }
 
@@ -188,6 +208,10 @@
             ctx.fillStyle = "#333";
             ctx.fillRect(0, 0, largura, altura);
 
+            ctx.fillStyle = "#fff"
+            ctx.font = "50px Arial";
+            ctx.fillText(bloco.score, 30, 68);
+
             if(estadoAtual == estado.jogar) {
                 ctx.fillStyle = "#072";
                 ctx.fillRect(largura / 2 - 50, altura / 2 -50, 100, 100);
@@ -195,9 +219,37 @@
             else if(estadoAtual == estado.perdeu) {
                 ctx.fillStyle = "red";
                 ctx.fillRect(largura / 2 - 50, altura / 2 -50, 100, 100);
+                
+                ctx.save();
+                ctx.translate(largura / 2, altura / 2 );
+                ctx.fillStyle = "#fff";
+
+                if (bloco.score > record)
+                    ctx.fillText("New Record!", -150, -65);
+
+                else if (record < 10)
+                      ctx.fillText("Record " + record, -99, -65);
+                
+                else if (record < 100)
+                      ctx.fillText("Record " + record, -112, -65);
+                else
+                      ctx.fillText("Record " + record, -125, -65);
+                
 
 
+                if (bloco.score < 10)
+                ctx.fillText(bloco.score, -13, 19,);
+
+                else if (bloco.score >= 10 && bloco.score < 100)
+                      ctx.fillText(bloco.score, -26, 19)
+
+                else 
+                  ctx.fillText(bloco.score, -39, 19);
+
+                ctx.restore();
+            
             }
+
             else if(estadoAtual == estado.jogando)
             obstaculos.desenha();
 
