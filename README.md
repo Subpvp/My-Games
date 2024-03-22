@@ -1,4 +1,4 @@
 # My-Games
  Repository of my games
  
-Play my game [AQUI](https://jpmoreiraaquino.github.io/My-Games/)
+Play my game [AQUI](https://jpmoreiradev.github.io/My-Games/)
