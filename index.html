@@ -14,15 +14,13 @@
             right: 0px;
             margin: auto;
         }
-        body {
-            background-color: #181A1B;
-        }
+/*kjp02120232323232323233*/
     </style>
 </head>
 <body>
     <script>
         
-        var canvas, ctx, altura, largura, frames = 0, maxjump = 3, velocidade = 5, estadoAtual,
+        var canvas, ctx, altura, largura, frames = 0, maxjump = 3, velocidade = 6, estadoAtual,
 
         estado = {
             jogar: 0,
@@ -167,7 +165,6 @@
             ctx = canvas.getContext("2d");
             document.body.appendChild(canvas);
             document.addEventListener("mousedown", clique);
-            document.addEventListener("keydown" , clique);
 
             estadoAtual = estado.jogar;
             record = localStorage.getItem("record");
